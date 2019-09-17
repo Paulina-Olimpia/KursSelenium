@@ -10,7 +10,10 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 
-import javax.swing.text.html.HTMLDocument;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 
 public class KatalonTest {
 
@@ -33,24 +36,45 @@ public class KatalonTest {
     @Test
     public void TestKatalon() {
 
-
         fillForm( "first-name", "Karol");
+        //assertTrue(labelFormularza.getText().startsWith("First"));
+
         fillForm( "last-name", "Kowalski");
-        WebElement Gender=driver.findElement(By.xpath("/html/body/div/div/form/div[3]/div/div/label[1]"));
-        System.out.println(Gender.isEnabled());
-        Gender.click();
+        //assertTrue(labelFormularza.getText().startsWith("Last"));
+
+
+        WebElement maleGenderRadio = driver.findElement(By.name("gender"));
+        System.out.println(maleGenderRadio.isEnabled());
+        maleGenderRadio.click();
+
         fillForm( "dob", "05/22/2010");
+        //assertTrue(labelFormularza.getText().startsWith("Date"));
+
+
         fillForm( "address", "Prosta 51");
+        //assertTrue(labelFormularza.getText().startsWith("Add"));
+
+
         fillForm( "email", "karol.kowalski@mailinator.com");
+        //assertTrue(labelFormularza.getText().startsWith("Email"));
+
+
         fillForm( "password", "Pass123");
+        //assertTrue(labelFormularza.getText().startsWith("Pass"));
+
+
         fillForm( "company", "Coderslab");
+        //assertTrue(labelFormularza.getText().startsWith("Com"));
+
+
         fillForm( "comment", "Moj pierwszy automat testowy");
+        //assertTrue(labelFormularza.getText().startsWith("Comm"));
 
 
         driver.findElement(By.id("submit")).click();
 
         WebElement successMessage = driver.findElement(By.id("submit-msg"));
-        Assert.assertEquals("Successfully submitted!", successMessage.getText());
+        assertEquals("Successfully submitted!", successMessage.getText());
     }
 
 
@@ -62,9 +86,11 @@ public class KatalonTest {
 
     public void fillForm(String identyfikator, String wartosc) {
         WebElement poleFormularza = driver.findElement(By.id(identyfikator));
-        poleFormularza.isDisplayed();
-        poleFormularza.isEnabled();
+        WebElement labelFormularza = driver.findElement(By.xpath("//label[@for='" + identyfikator + "']"));
+        Boolean isDisplayed = poleFormularza.isDisplayed();
+        Boolean isEnabled = poleFormularza.isEnabled();
         poleFormularza.sendKeys(wartosc);
-        System.out.println("Pole " + identyfikator + " ma wartosc " + wartosc);
+
+        System.out.println("Pole " + labelFormularza.getText() + " ma wartosc " + poleFormularza.getAttribute("value"));
     }
 }
